@@ -97,8 +97,9 @@ end
 
 
 %% Plot results
+plot_data=daily_deaths;
 
-maxp=2000;
+maxp=max(ceil(plot_data/1000))*1000;
 period=[datenum(2020,12,1):datenum(2022,7,1)]+1-datenum(2020,1,1); %plot period
 
 figure;hold on;
@@ -110,7 +111,7 @@ p2=patch([period(1),Relaxation_start,Relaxation_start,period(1)]+datenum(2020,1,
 set(gca, 'Layer', 'top');
 
 
-plot_data=daily_deaths;
+
 plot(X,plot_data(period),'LineWidth',1.5,'color',[0.4940 0.1840 0.5560]);
 ylabel('Daily deaths');
 datetick('x','mmm-yy','keeplimits');
