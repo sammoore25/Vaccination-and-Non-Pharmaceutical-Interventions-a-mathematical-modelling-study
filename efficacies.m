@@ -1,6 +1,22 @@
 function [efficD,eincD,efficT,eincT] = efficacies(gV1,vgroups,Region_PP,Region,EffT,Phzr_efficacy,AZ_efficacy,PhzrDose1_eff,AZDose1_eff)
 %% function to setup efficacies dependent on proportions of each vaccine delivered to each group and interaction between infection protection and disease
 
+% Inputs:
+% gV1 - Numbers per age group vaccinated during only Pfizer vacc phase
+% vgroups - Binary indicator of the age groups desiganted to receive vacc
+%           during Pfizer only phase.
+% Region_PP - Population by region and age.
+% Region - ID for region currently being analysed
+% EffT - Assumed prevention of infection efficacy following two doses
+% Phzr_efficacy,AZ_efficacy - Efficacy against symptomatic disease after two doses (Pfizer, AZ) 
+% PhzrDose1_eff,AZDose1_eff - Efficacy against symptomatic disease after one dose (Pfizer, AZ)
+
+% Outputs:
+% efficD - Scaling to symptomatic disease outcomes after one dose (1 - disease efficacy)
+% eincD - Increase in symptomatic disease efficacy with second dose
+% efficT - Scaling to force of infection due to prevention of infection efficacy (infection blocking) after one dose (1 - infection_prevention_efficacy)
+% eincT - Increase in prevention of infection efficacy with second dose
+
 %Set disease efficacies:
 
 % first 1M doses PHZR alone
@@ -25,19 +41,20 @@ else
     else%if only some of first group recieve just PFZR
         rem=phzrdose/gV1(effthresh);
     end
-    %Remaining roups recieve mixed dose efficacies
+    %Group that partially was initially all PFZR, then received mixture
     eincD=eincD+vgroups(effthresh,:)*(rem*(Phzr_efficacy-PhzrDose1_eff)+(1-rem)*mixeff2);
-    eincD=eincD+min(sum(vgroups(effthresh+1:end,:)),1)*mixeff2;
     efficD=efficD+vgroups(effthresh,:)*(rem*PhzrDose1_eff+(1-rem)*mixeff1);
+
+    %Remaining groups recieve mixed dose efficacies
+    eincD=eincD+min(sum(vgroups(effthresh+1:end,:)),1)*mixeff2;
     efficD=efficD+min(sum(vgroups(effthresh+1:end,:)),1)*mixeff1;
 end
 
 %transmission efficacy 80% after dose 1, then 100% after dose 2
-efficT=1-0.8*EffT*ones(1,21);
-eincT=0.2*EffT*ones(1,21);
+efficT=1-0.8*EffT*ones(1,21); % Scaling to force of infection from first dose (1 - 0.8*inf_prevention_efficacy)
+eincT=0.2*EffT*ones(1,21);    % Increase in infection prevention efficacy from second dose
 
-%adjust disease efficacy dependent on transmission effcacy (disease
-%efficacy
+%adjust disease efficacy dependent on transmission efficacy
 eincD=eincD+efficD;
 efficD=1-min((1-efficD)./(efficT),1);
 eincD=1-min((1-eincD)./(efficT-eincT),1);
