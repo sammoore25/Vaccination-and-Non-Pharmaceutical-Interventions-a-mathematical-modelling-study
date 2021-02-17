@@ -1,4 +1,6 @@
 function [aC,new_UK_from_toH, new_UK_from_toW, new_UK_from_toS, new_UK_from_toO] = npi_change(S_New_Var,Impact_of_New_Var,W,T,Region,ComplianceT,Region_PP,PD_Lockdown,Run_stop, UK_from_toH, UK_from_toW, UK_from_toS, UK_from_toO)
+%% Function to update mixing dependent on current compliance and effect of current level of evolved more contagious variants
+
 
 mmC=max(max(abs(ComplianceT)));
 if mmC>0
@@ -26,9 +28,7 @@ if Region==10
     if (T(end)>=355 && T(end)<=433)
         InSchoolFlag=0;   % ... EXTENDED CHRISTMAS BREAK
     end
-    %         if (T(end)>=355 && T(end)<=365)
-    %             InSchoolFlag=0;   % ... or Christmas
-    %         end
+  
 else
     if T(end)>=244 % ie 1st Sept put schools back
         InSchoolFlag=1;
@@ -36,13 +36,11 @@ else
     if T(end)>=299 && T(end)<=301
         InSchoolFlag=0;   % Unless its Half Term
     end
-    %         if (T(end)>=355 && T(end)<=417)
+
     if (T(end)>=355 && T(end)<=433)
         InSchoolFlag=0;   % ... EXTENDED CHRISTMAS BREAK
     end
-    %         if (T(end)>=355 && T(end)<=365)
-    %              InSchoolFlag=0;   % ... or Christmas
-    %         end
+
 end
 
 if T(end)>=458 && T(end)<472

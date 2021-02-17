@@ -1,5 +1,19 @@
 function [efficD,eincD,efficT,eincT] = efficacies(gV1,vgroups,Region_PP,Region,EffT,Phzr_efficacy,AZ_efficacy,PhzrDose1_eff,AZDose1_eff)
-%% function to setup efficacies dependent on proportions of each vaccine delivered to each group and interaction between transmission
+%% function to setup efficacies dependent on proportions of each vaccine delivered to each group and interaction between infection protection and disease
+% gV1 = total number left to vaccinate with dose 1
+% vgroups = vaccination groups by age
+% Region_PP = size of region by age
+% Region = current region
+% EffT = 2dose transmission eficacy
+% Phzr_efficacy = 2 dose Phzr efficacy
+% AZ_efficacy = 2 dose AZ efficacy
+% PhzrDose1_eff = 1 dose Phzr efficacy
+% AZDose1_eff = 1 dose AZ efficacy
+% 
+efficD = disease efficacies by age dose 1
+eincD =  disease efficacies by age dose 2 increase
+efficT = = disease efficacies by age
+eincT
 
 %Set disease efficacies:
 
