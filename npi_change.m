@@ -14,9 +14,6 @@ if mmC>0
     
 end
 
-
-
-
 InSchoolFlag=0;
 if Region==10
     if T(end)>=230  % ie Mid-August put schools back in Scotland
@@ -49,7 +46,7 @@ else
 end
 
 if T(end)>=458 && T(end)<472
-    InSchoolFlag=0; % Easter !
+    InSchoolFlag=0; % Easter
 end
 
 
@@ -57,30 +54,11 @@ if InSchoolFlag & ComplianceT(1,W)>=0
     aC(2:4)=0.2*aC(2:4);
 end
 
-% if T(end)>=244  % ie Start Sept put schools back.
-%     aC(2:4)=0.2*aC(2:4);
-% end
-
-%     if T(end)>=272  % ie End Sept put Uni's back
-%         aC(5)=0.4*aC(5);
-%     end
 
 PD_Lockdown=PD_Lockdown+(Run_stop(W)-T(end)).*(Region_PP(Region,:)*aC)./mmC;
 
 [new_UK_from_toH, new_UK_from_toW, new_UK_from_toS, new_UK_from_toO] = Return_New_Matrices(0.95, 0.8, 0.95, aC, UK_from_toH, UK_from_toW, UK_from_toS, UK_from_toO);
 
-%     if T(end)>=355 & T(end)<=362  % Only a week !!
-%         if exist('Christmas')
-%             if Christmas==1 % free for all
-%                 aC=0.5*aC;
-%                 [new_UK_from_toH, new_UK_from_toW, new_UK_from_toS, new_UK_from_toO] = Return_New_Matrices(0.95, 0.8, 0.95, aC, UK_from_toH, UK_from_toW, UK_from_toS, UK_from_toO);
-%             end
-%             if Christmas==-1 % my best guess
-%                 [new_UK_from_toH, new_UK_from_toW, new_UK_from_toS, new_UK_from_toO] = Return_New_Matrices(0.95, 0.8, 0.95, aC, UK_from_toH, UK_from_toW, UK_from_toS, UK_from_toO);
-%                 new_UK_from_toH=new_UK_from_toH*2; new_UK_from_toO=new_UK_from_toO*2;
-%             end
-%         end
-%     end
 
 Multi_Factor = 1 + S_New_Var(T(end)) * Impact_of_New_Var;  % where T(end) should be the current time.
 
@@ -88,8 +66,6 @@ new_UK_from_toH = new_UK_from_toH * Multi_Factor;
 new_UK_from_toW = new_UK_from_toW * Multi_Factor;
 new_UK_from_toS = new_UK_from_toS * Multi_Factor;
 new_UK_from_toO = new_UK_from_toO * Multi_Factor;
-
-
 
 end
 
