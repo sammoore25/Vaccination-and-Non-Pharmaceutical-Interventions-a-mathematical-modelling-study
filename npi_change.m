@@ -49,7 +49,6 @@ if Region==10
     if (T(end)>=355 && T(end)<=433)
         InSchoolFlag=0;   % ... EXTENDED CHRISTMAS BREAK
     end
-
 else
     if T(end)>=244 % ie 1st Sept put schools back
         InSchoolFlag=1;
@@ -61,7 +60,6 @@ else
     if (T(end)>=355 && T(end)<=433)
         InSchoolFlag=0;   % ... EXTENDED CHRISTMAS BREAK
     end
-
 end
 
 if T(end)>=458 && T(end)<472
