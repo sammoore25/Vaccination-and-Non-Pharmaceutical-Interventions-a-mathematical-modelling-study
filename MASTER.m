@@ -71,7 +71,9 @@ end
 %% Run simulation
 
 
-for Region=REGIONS
+for i=1:length(REGIONS)
+    Region=REGIONS(i);
+    fprintf(1,'Simulating region %d of %d \n',i,length(REGIONS));
     
     %Add vaccination start point
     WW=find(RUN_STOPs(Region,:)>Vacc_start_date,1,'first')-1;
@@ -103,7 +105,7 @@ cols=[0.4940 0.1840 0.5560;0.9290, 0.6940, 0.1250;0.3290, 0.6940, 0.1250];
 period=[datenum(2020,12,1):datenum(2022,7,1)]+1-datenum(2020,1,1); %plot period
 X=datenum(2020,1,1)+period;
 
-for i=1:size(plot_data,2)
+for i=size(plot_data,2):-1:1
     
 maxp=max(ceil(plot_data(period,i)/1000))*1000;
 

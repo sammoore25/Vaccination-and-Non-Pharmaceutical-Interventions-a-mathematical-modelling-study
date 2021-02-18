@@ -86,15 +86,9 @@ end
 options = odeset('RelTol', 1e-8);
 [t, pop]=ode45(@Diff_3_4,[0:1:MaxTime],[InitialState],options,[L number_E_states reshape(M_from_to_H,1,[]) reshape(M_from_to_O,1,[]) sigma' d' tau' alpha gamma N0' hhq']);
 
-% Assign ODE solutions to output variables
-T=t; S=pop(:,1:L); EF=pop(:,L+[1:L]); ES1=pop(:,2*L+[1:L]); ES2=pop(:,3*L+[1:L]); 
-DF=pop(:,4*L+[1:L]); DS1=pop(:,5*L+[1:L]); DS2=pop(:,6*L+[1:L]);
-UF=pop(:,7*L+[1:L]); US=pop(:,8*L+[1:L]); 
-EQ=pop(:,9*L+[1:L]);  DQF=pop(:,10*L+[1:L]); DQS=pop(:,11*L+[1:L]); UQ=pop(:,12*L+[1:L]); 
-
 m=number_E_states;
-
-S=pop(:,1:L);  EF=0*S; ES1=0*S; ES2=0*S; EQ=0*S;
+ %Assign ODE solutions to output variables
+T=t;S=pop(:,1:L);  EF=0*S; ES1=0*S; ES2=0*S; EQ=0*S;
 for i=1:m
     EF=EF+pop(:,L+[1:L]+3*(i-1)*L); ES1=ES1+pop(:,2*L+[1:L]+3*(i-1)*L); ES2=ES2+pop(:,3*L+[1:L]+3*(i-1)*L);
     EQ=EQ+pop(:,6*L+[1:L]+3*m*L+(i-1)*L);
