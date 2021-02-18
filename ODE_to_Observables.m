@@ -1,21 +1,13 @@
 function [nDC, nHospital, inHospital, nICU, inICU, nDeaths, INF]=ODE_to_Observables(T, nDC, E, Region, h_factor,i_factor,d_factor,h_stretch,i_stretch,a,...
     Assumed_Delay_Reporting_Deaths, rc_Distribution_Hosp_Time, rc_Distribution_HospICU_Time, rc_Distribution_ICU_Time, Distribution_Symptoms_to_Hospital, Distribution_Symptoms_to_ICU, Distribution_Hopital_to_Death, ...
     Hosp_2_Death, Sympt_2_critcal, Sympt_2_hosp, Wales_Flag) 
+%% function to map symptomatic cases to public health quantities, 
+%% hospitalisations, cases requiring ICU treatment & deaths
 
-% load Distributions.mat
-% Distribution_Symptoms_to_Hospital(1)=0;  % Don't beleive 1 day from Symp to Hosp.
-% Distribution_Symptoms_to_Hospital=Distribution_Symptoms_to_Hospital/sum(Distribution_Symptoms_to_Hospital);
-% 
-% load Probabilities.mat
+% Get number of age groups in use
 nA=size(nDC,2);
 
-% if nA>21
-%     Sympt_2_hosp=EXPANDV(Sympt_2_hosp);
-%     Sympt_2_critcal=EXPANDV(Sympt_2_critcal);
-%     Hosp_2_Death=EXPANDV(Hosp_2_Death);
-% end
-
-%new Hospital
+%new Hospital admissions
 nHospital=zeros(max(T)+100,nA);
 A=1:nA;
 LL=[1:length(Distribution_Symptoms_to_Hospital)];
