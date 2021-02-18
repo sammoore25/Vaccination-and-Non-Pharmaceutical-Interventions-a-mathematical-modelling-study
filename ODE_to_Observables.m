@@ -1,15 +1,49 @@
 function [nDC, nHospital, inHospital, nICU, inICU, nDeaths, INF]=ODE_to_Observables(T, nDC, E, Region, h_factor,i_factor,d_factor,h_stretch,i_stretch,a,...
     Assumed_Delay_Reporting_Deaths, rc_Distribution_Hosp_Time, rc_Distribution_HospICU_Time, rc_Distribution_ICU_Time, Distribution_Symptoms_to_Hospital, Distribution_Symptoms_to_ICU, Distribution_Hopital_to_Death, ...
-    Hosp_2_Death, Sympt_2_critcal, Sympt_2_hosp, Wales_Flag) 
+    Hosp_2_Death, Sympt_2_critcal, Sympt_2_hosp, Wales_Flag)
+%% function to map symptomatic cases to public health quantities,
+%% hospitalisations, cases requiring ICU treatment & deaths
 
+% Inputs:
+% T = Time
+% nDC = Number of new symptomatic cases
+% E = Number in Latent classes
+% Region = ID for region being analysed
+% h_factor,i_factor,d_factor = Scaling factors applied to age-dependent probability distributions
+%         h_factor scales Sympt_2_hosp
+%         i_factor scales Sympt_2_critcal                      
+%         d_factor scales Hosp_2_death                      
+% h_stretch,i_stretch = Strech factor used on length of stay distributions for hospital & ICU
+% a = Transition rate from final latent state to infectious states
+% Assumed_Delay_Reporting_Deaths = Vector, region-specific
+% rc_Distribution_Hosp_Time = Survival distribution for time spent in hospital
+% rc_Distribution_HospICU_Time = Survival distribution for time spent in hospital before moving to ICU 
+% rc_Distribution_ICU_Time = Survival distribution for time spent in ICU
+% Distribution_Symptoms_to_Hospital = Time from becomign symptomatic to
+%                                       being admitted to hospital
+% Distribution_Symptoms_to_ICU = Time from becoming symptomatic to
+%                                       being admitted to ICU
+% Distribution_Hopital_to_Death = Time from hsopitalisation to death
+% Hosp_2_Death, Sympt_2_critcal, Sympt_2_hosp = Age-dependent probability distributions 
+% Wales_Flag = Flag variable for use on Wales outputs.
 
+% Outputs:
+% nDC - New symptomatic cases
+% nHospital - New hospital admissions
+% inHospital - Hospital occupancy
+% nICU - New ICU admissions
+% inICU - ICU occupancy
+% nDeaths - New deaths
+% INF - New infectious cases
+
+% Get number of age groups in use
 nA=size(nDC,2);
 
-%new Hospital
+%new Hospital admissions
 nHospital=zeros(max(T)+100,nA);
 A=1:nA;
 LL=[1:length(Distribution_Symptoms_to_Hospital)];
-for t=1:length(T)  
+for t=1:length(T)
     nHospital(T(t)+LL,A)=nHospital(T(t)+LL,A) + Distribution_Symptoms_to_Hospital'*(nDC(T(t),A).*(Sympt_2_hosp(A).*h_factor)');
 end
 
@@ -37,7 +71,7 @@ for t=1:length(T)
 end
 nHospital((max(T)+1):end,:)=[];
 inHospital((max(T)+1):end,:)=[];
-    
+
 %in ICU
 inICU=zeros(max(T)+ceil(100*i_stretch),nA);
 l=length(rc_Distribution_ICU_Time)-1;
@@ -56,7 +90,7 @@ if Region==9 & Wales_Flag % if Wales !!  DO IT ALL AGAINST BUT WITH 14 day cut-o
     l=length(rc_Distribution_HospICU_Time)-1;
     tmpDist_HospICU_Time=interp1([0:l],rc_Distribution_HospICU_Time,[0:(1/h_stretch):l],'linear')';
     tmpDist_Hosp_Time(15:end)=0;  tmpDist_HospICU_Time(15:end)=0;
-    
+
     l=length(tmpDist_Hosp_Time);
     for t=1:length(T)
         inHospital2(T(t)+[1:l]-1,A)=inHospital2(T(t)+[1:l]-1,A)+tmpDist_Hosp_Time*nHospital(T(t),A);
@@ -68,12 +102,12 @@ if Region==9 & Wales_Flag % if Wales !!  DO IT ALL AGAINST BUT WITH 14 day cut-o
     inHospital2((max(T)+1):end,:)=[];
     MM=min((max(T)+1),147);
     inHospital(1:MM,:)=inHospital2(1:MM,:);
-    
+
     inICU2=zeros(max(T)+ceil(100*i_stretch),nA);
     l=length(rc_Distribution_ICU_Time)-1;
     tmpDist_ICU_Time=interp1([0:l],rc_Distribution_ICU_Time,[0:(1/i_stretch):l],'linear')';
     tmpDist_ICU_Time(15:end)=0;
-    
+
     l=length(tmpDist_ICU_Time);
     for t=1:length(T)
         inICU2(T(t)+[1:l]-1,A)=inICU2(T(t)+[1:l]-1,A)+tmpDist_ICU_Time*nICU(T(t),A);

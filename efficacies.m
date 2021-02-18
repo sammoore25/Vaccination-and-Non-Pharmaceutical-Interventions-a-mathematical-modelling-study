@@ -15,6 +15,23 @@ function [efficD,eincD,efficT,eincT] = efficacies(gV1,vgroups,Region_PP,Region,E
 % efficT = transmission efficacies by age dose 1
 % eincT = transmission efficacies by age dose 2 increase
 
+% Inputs:
+% gV1 = total number left to vaccinate with dose 1
+% vgroups = vaccination groups by age
+% Region_PP = size of region by age
+% Region = current region
+% EffT = 2dose transmission eficacy
+% Phzr_efficacy = 2 dose Phzr efficacy
+% AZ_efficacy = 2 dose AZ efficacy
+% PhzrDose1_eff = 1 dose Phzr efficacy
+% AZDose1_eff = 1 dose AZ efficacy
+
+% Outputs:
+% efficD = disease efficacies by age dose 1
+% eincD =  disease efficacies by age dose 2 increase
+% efficT = transmission efficacies by age dose 1
+% eincT = transmission efficacies by age dose 2 increase
+
 %Set disease efficacies:
 
 % first 1M doses PHZR alone
@@ -39,19 +56,20 @@ else
     else%if only some of first group recieve just PFZR
         rem=phzrdose/gV1(effthresh);
     end
-    %Remaining roups recieve mixed dose efficacies
+    %Group that partially was initially all PFZR, then received mixture
     eincD=eincD+vgroups(effthresh,:)*(rem*(Phzr_efficacy-PhzrDose1_eff)+(1-rem)*mixeff2);
-    eincD=eincD+min(sum(vgroups(effthresh+1:end,:)),1)*mixeff2;
     efficD=efficD+vgroups(effthresh,:)*(rem*PhzrDose1_eff+(1-rem)*mixeff1);
+
+    %Remaining groups recieve mixed dose efficacies
+    eincD=eincD+min(sum(vgroups(effthresh+1:end,:)),1)*mixeff2;
     efficD=efficD+min(sum(vgroups(effthresh+1:end,:)),1)*mixeff1;
 end
 
 %transmission efficacy 80% after dose 1, then 100% after dose 2
-efficT=1-0.8*EffT*ones(1,21);
-eincT=0.2*EffT*ones(1,21);
+efficT=1-0.8*EffT*ones(1,21); % Scaling to force of infection from first dose (1 - 0.8*inf_prevention_efficacy)
+eincT=0.2*EffT*ones(1,21);    % Increase in infection prevention efficacy from second dose
 
-%adjust disease efficacy dependent on transmission effcacy (disease
-%efficacy
+%adjust disease efficacy dependent on transmission efficacy
 eincD=eincD+efficD;
 efficD=1-min((1-efficD)./(efficT),1);
 eincD=1-min((1-eincD)./(efficT-eincT),1);

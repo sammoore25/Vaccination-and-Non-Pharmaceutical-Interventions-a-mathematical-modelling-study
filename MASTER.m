@@ -37,9 +37,9 @@ daily_hospital_occupancy=zeros(maxtime,1);
 
 %Vaccination parameters
 target_group_order={80:5:100,75,70,65,60,55,50,10:5:45};
-transmission_efficacy=0.6;
+transmission_efficacy=0.6; % Prevention of infection vaccine efficacy
 Disease_efficacy=[0.94,0.88,0.88,0.7]; %[PHZR 2dose,AZR 2dose, PHZR 1dose, AZR 1dose] 
-uptake= [0,0,0,0.75*2/5,ones(1,6)*0.75,ones(1,6)*0.85,ones(1,5)*0.95];
+uptake= [0,0,0,0.75*2/5,ones(1,6)*0.75,ones(1,6)*0.85,ones(1,5)*0.95]; % Uptake in each 5-year age band. Entry 1 - 0-4yrs, ... , Entry 21 - 100+yrs
 vstep=2; %simulation stepsize
 Delivery=[(0.786/3)*1e6,(0.786/3)*1e6,(0.786/3)*1e6,0.32*1e6,1.225e6,1.61e6,2.2515e6,2.75e6,2e6,1.75e6,repmat(2.5e6,1,50)]; %Weekly doses accross all regions
 Delivery=repelem(Delivery,7)/7;
