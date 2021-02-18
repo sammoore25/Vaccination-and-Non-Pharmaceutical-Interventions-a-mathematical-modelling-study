@@ -4,6 +4,38 @@ function [nDC, nHospital, inHospital, nICU, inICU, nDeaths, INF]=ODE_to_Observab
 %% function to map symptomatic cases to public health quantities,
 %% hospitalisations, cases requiring ICU treatment & deaths
 
+% Inputs:
+% T = Time
+% nDC = Number of new symptomatic cases
+% E = Number in Latent classes
+% Region = ID for region being analysed
+% h_factor,i_factor,d_factor = Scaling factors applied to age-dependent probability distributions
+%         h_factor scales Sympt_2_hosp
+%         i_factor scales Sympt_2_critcal                      
+%         d_factor scales Hosp_2_death                      
+% h_stretch,i_stretch = Strech factor used on length of stay distributions for hospital & ICU
+% a = Transition rate from final latent state to infectious states
+% Assumed_Delay_Reporting_Deaths = Vector, region-specific
+% rc_Distribution_Hosp_Time = Survival distribution for time spent in hospital
+% rc_Distribution_HospICU_Time = Survival distribution for time spent in hospital before moving to ICU 
+% rc_Distribution_ICU_Time = Survival distribution for time spent in ICU
+% Distribution_Symptoms_to_Hospital = Time from becomign symptomatic to
+%                                       being admitted to hospital
+% Distribution_Symptoms_to_ICU = Time from becoming symptomatic to
+%                                       being admitted to ICU
+% Distribution_Hopital_to_Death = Time from hsopitalisation to death
+% Hosp_2_Death, Sympt_2_critcal, Sympt_2_hosp = Age-dependent probability distributions 
+% Wales_Flag = Flag variable for use on Wales outputs.
+
+% Outputs:
+% nDC - New symptomatic cases
+% nHospital - New hospital admissions
+% inHospital - Hospital occupancy
+% nICU - New ICU admissions
+% inICU - ICU occupancy
+% nDeaths - New deaths
+% INF - New infectious cases
+
 % Get number of age groups in use
 nA=size(nDC,2);
 

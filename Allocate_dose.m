@@ -7,15 +7,12 @@ function [gV1,gV2,V1,V2,Vacd,Vacd2,vdel] = Allocate_dose(vdelay,T,i,gV1,gV2,V1,V
 % gV2 = total number waiting for dose 2 in this time step
 % V1 = number of susceptibles left to vaccinate with dose 1
 % V2 = number of susceptibles waiting for dose 2 in this time step
-% Vacd1 = number of susceptibles having received dose 1
+% Vacd = number of susceptibles having received dose 1
 % Vacd2 = number of susceptibles having received dose 2
 % vdel = number of doses to assign
 % vstep = time step
 % vgroups = vaccination groups by age
 % whov = vaccination group ordering
-
-
-
 
 if gV2(i)>0 %find those ready for 2nd doses first
     propv=min(vdel/gV2(i),1);
