@@ -45,7 +45,6 @@ if Region==10
     if T(end)>=292 && T(end)<=294
         InSchoolFlag=0;  % Unless its Half Term
     end
-    %         if (T(end)>=355 && T(end)<=417)
     if (T(end)>=355 && T(end)<=433)
         InSchoolFlag=0;   % ... EXTENDED CHRISTMAS BREAK
     end

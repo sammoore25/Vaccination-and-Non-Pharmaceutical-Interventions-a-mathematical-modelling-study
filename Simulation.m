@@ -1,6 +1,6 @@
 function [nDC,nHospital, inHospital, nICU, inICU, nDeaths, PD_Lockdown, INF]=Simulation(Impact_of_New_Var,S_New_Var,delay,EffT,Disease_efficacy,WW,vstep,VDEL,vpropm,whov,Region, tau, ALPHA, a, S_Scale, Factor, h_factor, i_factor, d_factor, h_stretch, ...
     i_stretch, Lag, Start_Date,  WALES_FLAG, ComplianceT, Run_stop, Detection, Susceptibility, gamma)
-
+%% Main simulation script, calls in ODEs and determines disease outcomes
 
 S=size(Run_stop);
 if S(2)==1
@@ -42,7 +42,7 @@ T=T+Start_Date;
 
 %Self Isolation for 4 days
 [t,s,e,d,nd,u , R0, Da, FinalState]=ODEs_without_vaccine(gamma*UK_from_toH*Z, gamma*(UK_from_toW + UK_from_toS + UK_from_toO), a, gamma, Susceptibility3, Detection, tau, 0, Region_PP(Region,:)' , 4, [FinalState]);
-%record putputs
+%record outputs
 T=[T; T(end)+t(2:end)]; S=[S; s(2:end,:)]; E=[E; e(2:end,:)]; D=[D; d(2:end,:)]; nD=[nD; nd(2:end,:)]; U=[U; u(2:end,:)];
 
 %Work from Home + Self Isolation for 4 days
