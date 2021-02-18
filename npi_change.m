@@ -1,6 +1,5 @@
 function [aC,new_UK_from_toH, new_UK_from_toW, new_UK_from_toS, new_UK_from_toO] = npi_change(S_New_Var,Impact_of_New_Var,W,T,Region,ComplianceT,Region_PP,PD_Lockdown,Run_stop, UK_from_toH, UK_from_toW, UK_from_toS, UK_from_toO)
-%% function to amend the mixing matrices in response to 
-%% school openings & presence of more transmissible variant
+%% Function to update mixing dependent on current compliance and effect of current level of evolved more contagious variants
 
 % Inputs:
 % S_New_Var - Fraction of virus in circulation that is more transmissible variant
@@ -11,7 +10,7 @@ function [aC,new_UK_from_toH, new_UK_from_toW, new_UK_from_toS, new_UK_from_toO]
 % ComplianceT - Adherence to NPIs
 % Region_PP - Population per five-year age group in the current region
 % Run_stop - Time at which this phase of NPI strength ends.
-% UK_from_toH, UK_from_toW, UK_from_toS, UK_from_toO - 
+% UK_from_toH, UK_from_toW, UK_from_toS, UK_from_toO -
 %   The original mixing matrices/contact arrays.
 %   Order is Household, Work, School, Other
 
@@ -34,7 +33,7 @@ if mmC>0
     if length(ComplianceT(:,W))==21
         aC=reshape(abs(ComplianceT(:,W)),21,1);
     end
-    
+
 end
 
 % Based on time T, specify if schools are open by binary variable InSchoolFlag
@@ -50,9 +49,7 @@ if Region==10
     if (T(end)>=355 && T(end)<=433)
         InSchoolFlag=0;   % ... EXTENDED CHRISTMAS BREAK
     end
-    %         if (T(end)>=355 && T(end)<=365)
-    %             InSchoolFlag=0;   % ... or Christmas
-    %         end
+
 else
     if T(end)>=244 % ie 1st Sept put schools back
         InSchoolFlag=1;
@@ -60,13 +57,11 @@ else
     if T(end)>=299 && T(end)<=301
         InSchoolFlag=0;   % Unless its Half Term
     end
-    %         if (T(end)>=355 && T(end)<=417)
+
     if (T(end)>=355 && T(end)<=433)
         InSchoolFlag=0;   % ... EXTENDED CHRISTMAS BREAK
     end
-    %         if (T(end)>=355 && T(end)<=365)
-    %              InSchoolFlag=0;   % ... or Christmas
-    %         end
+
 end
 
 if T(end)>=458 && T(end)<472
@@ -94,4 +89,3 @@ new_UK_from_toS = new_UK_from_toS * Multi_Factor;
 new_UK_from_toO = new_UK_from_toO * Multi_Factor;
 
 end
-

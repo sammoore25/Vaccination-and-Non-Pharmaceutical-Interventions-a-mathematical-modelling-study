@@ -145,9 +145,8 @@ for i=1:length(VDEL)-1
             break;
         end
         
-  end
-    
-       vdel=VDEL(i+1)+vdel;
+    end
+      vdel=VDEL(i+1)+vdel; 
     
     if sum(gV1)+sum(gV2(i+1:end))<100 %if no more to vaccinate, end period
         break

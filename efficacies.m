@@ -2,20 +2,21 @@ function [efficD,eincD,efficT,eincT] = efficacies(gV1,vgroups,Region_PP,Region,E
 %% function to setup efficacies dependent on proportions of each vaccine delivered to each group and interaction between infection protection and disease
 
 % Inputs:
-% gV1 - Numbers per age group vaccinated during only Pfizer vacc phase
-% vgroups - Binary indicator of the age groups desiganted to receive vacc
-%           during Pfizer only phase.
-% Region_PP - Population by region and age.
-% Region - ID for region currently being analysed
-% EffT - Assumed prevention of infection efficacy following two doses
-% Phzr_efficacy,AZ_efficacy - Efficacy against symptomatic disease after two doses (Pfizer, AZ) 
-% PhzrDose1_eff,AZDose1_eff - Efficacy against symptomatic disease after one dose (Pfizer, AZ)
+% gV1 = total number left to vaccinate with dose 1
+% vgroups = vaccination groups by age
+% Region_PP = size of region by age
+% Region = current region
+% EffT = 2dose transmission eficacy
+% Phzr_efficacy = 2 dose Phzr efficacy
+% AZ_efficacy = 2 dose AZ efficacy
+% PhzrDose1_eff = 1 dose Phzr efficacy
+% AZDose1_eff = 1 dose AZ efficacy
 
 % Outputs:
-% efficD - Scaling to symptomatic disease outcomes after one dose (1 - disease efficacy)
-% eincD - Increase in symptomatic disease efficacy with second dose
-% efficT - Scaling to force of infection due to prevention of infection efficacy (infection blocking) after one dose (1 - infection_prevention_efficacy)
-% eincT - Increase in prevention of infection efficacy with second dose
+% efficD = disease efficacies by age dose 1
+% eincD =  disease efficacies by age dose 2 increase
+% efficT = transmission efficacies by age dose 1
+% eincT = transmission efficacies by age dose 2 increase
 
 %Set disease efficacies:
 

@@ -97,23 +97,24 @@ end
 
 
 %% Plot results
-plot_data=daily_deaths;
-
-maxp=max(ceil(plot_data/1000))*1000;
+plot_data=[daily_deaths,daily_hospital_admissions,daily_hospital_occupancy];
+dlabs={'Daily deaths','Daily hospital admissions','Hospital occupancy'};
+cols=[0.4940 0.1840 0.5560;0.9290, 0.6940, 0.1250;0.3290, 0.6940, 0.1250];
 period=[datenum(2020,12,1):datenum(2022,7,1)]+1-datenum(2020,1,1); %plot period
+X=datenum(2020,1,1)+period;
+
+for i=1:size(plot_data,2)
+    
+maxp=max(ceil(plot_data(period,i)/1000))*1000;
 
 figure;hold on;
-
-X=datenum(2020,1,1)+period;
 
 p1=patch([Relaxation_start,Relaxation_end,Relaxation_end,Relaxation_start]+datenum(2020,1,1),[maxp 0 0 0], [1,1,1]*0.87,'LineStyle','none','HandleVisibility','off');
 p2=patch([period(1),Relaxation_start,Relaxation_start,period(1)]+datenum(2020,1,1),[maxp maxp 0 0], [1,1,1]*0.87,'LineStyle','none','HandleVisibility','off');
 set(gca, 'Layer', 'top');
 
-
-
-plot(X,plot_data(period),'LineWidth',1.5,'color',[0.4940 0.1840 0.5560]);
-ylabel('Daily deaths');
+plot(X,plot_data(period,i),'LineWidth',1.5,'color',cols(i,:));
+ylabel(dlabs{i});
 datetick('x','mmm-yy','keeplimits');
 set(gca, 'fontname', 'times','fontsize',14);
 xlim([datenum(2020,1,1)+period(1),datenum(2020,1,1)+period(end)]);
@@ -122,3 +123,4 @@ box on
 ax = gca;
 ax.YGrid = 'on';
 ax.GridLineStyle = '-';
+end
